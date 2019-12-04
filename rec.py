@@ -12,7 +12,7 @@ from credentials import yandex_cloud_folder_id, yandex_service_account_id, yande
 
 
 def get_jwt():
-    with open("SRBot/private_key.pem", 'r') as private:
+    with open("private_key.pem", 'r') as private:
         private_key = private.read()
     now = int(time.time())
     payload = {

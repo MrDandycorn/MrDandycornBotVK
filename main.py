@@ -10,7 +10,7 @@ import asyncio
 import os
 from urllib.parse import urlparse
 from vk_botting.ext import bot
-from SRBot.rec import speechrec_setup
+from rec import speechrec_setup
 
 from credentials import vkNotifBotKey, mosru_mail1, mosru_psw1, mosru_mail2, mosru_psw2, RUParserInfo, weekType, vkPersUserID
 
