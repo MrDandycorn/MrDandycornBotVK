@@ -9,7 +9,7 @@ import locale
 import asyncio
 import os
 from urllib.parse import urlparse
-from vk_botting.ext import bot
+from vk_botting import bot, in_user_list
 from rec import speechrec_setup
 
 from credentials import vkNotifBotKey, mosru_mail1, mosru_psw1, mosru_mail2, mosru_psw2, RUParserInfo, weekType, vkPersUserID
@@ -345,11 +345,11 @@ async def get_commands(ctx):
 
 
 @nbot.command()
+@in_user_list(vkPersUserID)
 async def do(ctx):
     global dv
-    if ctx.message.peer_id == int(vkPersUserID):
-        dv = not dv
-        return await ctx.reply(':)')
+    dv = not dv
+    return await ctx.reply(':)')
 
 
 @nbot.command(name='Прокрастинировать')

@@ -1,5 +1,5 @@
 from vk_botting import cog
-from vk_botting.ext.attachments import AudioMessage
+from vk_botting import AudioMessage
 import aiohttp
 import time
 import asyncio
