@@ -291,7 +291,7 @@ async def check():
             print(f'Ошибка: {e}')
 
 
-nbot = bot.Bot(vkNotifBotKey, command_prefix=bot.when_mentioned_or('!'))
+nbot = bot.Bot(command_prefix=bot.when_mentioned_or('!'), case_insensitive=True)
 
 
 @nbot.listen()
@@ -301,12 +301,12 @@ async def on_ready():
     speechrec_setup(nbot)
 
 
-@nbot.command(name='тест', aliases=['Тест'])
+@nbot.command(name='тест')
 async def test(ctx):
     return await ctx.reply('Тестовое сообщение')
 
 
-@nbot.command(name='дз', aliases=['Дз', 'ДЗ'])
+@nbot.command(name='дз')
 async def hw(ctx, *, text):
     text = text.lower()
     text = text.replace('!дз ', '')
@@ -320,7 +320,7 @@ async def hw(ctx, *, text):
     return await ctx.reply(msg)
 
 
-@nbot.command(name='расписание', aliases=['р', 'Р', 'Расписание'])
+@nbot.command(name='расписание', aliases=['р'])
 async def sched(ctx, *, text=None):
     if not text:
         return await ctx.reply(attachment='photo-179049108_457239024')
@@ -336,7 +336,7 @@ async def sched(ctx, *, text=None):
     return await ctx.reply(msg)
 
 
-@nbot.command(name='команды', aliases=['Команды'])
+@nbot.command(name='команды')
 async def get_commands(ctx):
     msg = 'Команды:\n'
     for i, command in enumerate(commands):
@@ -359,4 +359,4 @@ async def proc(ctx):
     return await ctx.reply(str(counter))
 
 
-nbot.run()
+nbot.run(vkNotifBotKey)
