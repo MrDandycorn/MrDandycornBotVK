@@ -291,7 +291,7 @@ async def check():
             print(f'Ошибка: {e}')
 
 
-nbot = bot.Bot(command_prefix=bot.when_mentioned_or('!'), case_insensitive=True)
+nbot = bot.Bot(command_prefix=bot.when_mentioned_or_pm_or('!'), case_insensitive=True)
 
 
 @nbot.listen()
