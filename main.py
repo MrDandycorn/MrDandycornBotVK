@@ -260,8 +260,8 @@ nbot = Bot(command_prefix=when_mentioned_or_pm_or('!'), case_insensitive=True)
 def fill_keyboard():
     k = Keyboard()
     for day in ['завтра', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу']:
-        k.add_button(f'!дз на {day}')
-        k.add_button(f'!расписание на {day}')
+        k.add_button(f'дз на {day}')
+        k.add_button(f'расписание на {day}')
         k.add_line()
     k.lines.pop(-1)
     return k
