@@ -39,7 +39,7 @@ async def get_user(session, email, psw):
         'password': psw,
         'alien': 'false'
     }
-    result = await session.get(URL, timeout=3)
+    result = await session.get(URL)
     result = await session.post(result.url, data=payload, headers={"Content-Type": "application/x-www-form-urlencoded"})
     token = result.url.query['token']
     payload = {
