@@ -7,9 +7,7 @@ import dateutil
 import aiohttp
 import locale
 import asyncio
-import os
-from urllib.parse import urlparse
-from vk_botting import bot, in_user_list
+from vk_botting import Bot, in_user_list, when_mentioned_or_pm_or, Keyboard
 from rec import speechrec_setup
 
 from credentials import vkNotifBotKey, mosru_mail1, mosru_psw1, mosru_mail2, mosru_psw2, RUParserInfo, weekType, vkPersUserID
@@ -229,40 +227,6 @@ async def checkStatus():
     return fin
 
 
-async def vkMsg(peer_id, msg=None, attach=None):
-    payload = {'access_token': vkNotifBotKey, 'v': '5.80',
-               'message': msg,
-               'peer_id': peer_id,
-               'attachment': attach}
-    async with aiohttp.ClientSession() as session:
-        r = await session.get('https://api.vk.com/method/messages.send', params=payload)
-        return r.json()
-
-
-async def vkUpload(peer_id, file, typ='doc'):
-    payload = {'access_token': vkNotifBotKey, 'v': '5.101',
-               'type': typ,
-               'peer_id': peer_id}
-    async with aiohttp.ClientSession() as session:
-        r = await session.get('https://api.vk.com/method/docs.getMessagesUploadServer', params=payload)
-        r = await r.json()
-        imurl = r['response']['upload_url']
-        files = {'file': open(file, 'rb')}
-        r = await session.post(imurl, files=files)
-        r = await r.json()
-        filedata = r['file']
-        payload = {
-            'access_token': vkNotifBotKey, 'v': '5.101',
-            'file': filedata,
-            'title': os.path.splitext(file)[0]
-        }
-        r = await session.get('https://api.vk.com/method/docs.save', params=payload)
-        r = await r.json()
-        doc = r['response']
-    parsed = urlparse(doc[doc['type']]['url'])
-    return parsed.path[1:]
-
-
 async def check():
     while True:
         try:
@@ -279,19 +243,28 @@ async def check():
                             found = True
                             ndt = datetime.datetime.strptime(new['new_date_prepared_for'][:10], '%Y-%m-%d')
                             if ndt > datetime.datetime.today():
-                                await vkMsg(prid, 'Новое дз для обеих групп на {} по {}: {}'.format(datetime.datetime.strptime(new['new_date_prepared_for'][:10], '%Y-%m-%d').strftime(
+                                await nbot.send_message(prid, 'Новое дз для обеих групп на {} по {}: {}'.format(datetime.datetime.strptime(new['new_date_prepared_for'][:10], '%Y-%m-%d').strftime(
                                     '%a, %d %b %Y'), new['sname'], new['new_hw_description']))
                                 break
                 if not found:
                     ndt = datetime.datetime.strptime(new['new_date_prepared_for'][:10], '%Y-%m-%d')
                     if ndt > datetime.datetime.today():
-                        await vkMsg(prid, 'Новое дз для группы {} на {} по {}: {}'.format(new['gn'], ndt.strftime(
-                            '%a, %d %b %Y'), new['sname'], new['new_hw_description']))
+                        await nbot.send_message(prid, 'Новое дз для группы {} на {} по {}: {}'.format(new['gn'], ndt.strftime('%a, %d %b %Y'), new['sname'], new['new_hw_description']))
         except Exception as e:
             print(f'Ошибка: {e}')
 
 
-nbot = bot.Bot(command_prefix=bot.when_mentioned_or_pm_or('!'), case_insensitive=True)
+nbot = Bot(command_prefix=when_mentioned_or_pm_or('!'), case_insensitive=True)
+
+
+def fill_keyboard():
+    k = Keyboard()
+    for day in ['завтра', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу']:
+        k.add_button(f'!дз на {day}')
+        k.add_button(f'!расписание на {day}')
+        k.add_line()
+    k.lines.pop(-1)
+    return k
 
 
 @nbot.listen()
@@ -341,7 +314,18 @@ async def get_commands(ctx):
     msg = 'Команды:\n'
     for i, command in enumerate(commands):
         msg += f'{i+1}: {command}\n'
-    await ctx.reply(msg)
+    await ctx.reply(msg, keyboard=fill_keyboard())
+
+
+@nbot.command()
+async def show(ctx):
+    return await ctx.reply('Клавиатура заполнена', keyboard=fill_keyboard())
+
+
+@nbot.command()
+async def clear(ctx):
+    k = Keyboard.get_empty_keyboard()
+    return await ctx.reply('Клавиатура очищена', keyboard=k)
 
 
 @nbot.command()
