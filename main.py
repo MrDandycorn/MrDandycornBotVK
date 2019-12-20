@@ -9,6 +9,7 @@ import locale
 import asyncio
 from vk_botting import Bot, in_user_list, when_mentioned_or_pm_or, Keyboard, Attachment, AttachmentType
 from rec import speechrec_setup
+from procrastinate import proc_setup
 
 from credentials import vkNotifBotKey, mosru_mail1, mosru_psw1, mosru_mail2, mosru_psw2, RUParserInfo, weekType, vkPersUserID
 
@@ -17,7 +18,6 @@ commands = ['!Тест', '!Дз <дата> <группа, если нужна>',
 group1 = [' группа 1', ' группы 1', ' 1 группа', ' 1 группы', ' первой группы', ' первая группа']
 group2 = [' группа 2', ' группы 2', ' 2 группа', ' 2 группы', ' второй группы', ' вторая группа']
 
-counter = 0
 dv = False
 server = ''
 key = ''
@@ -259,7 +259,10 @@ nbot = Bot(command_prefix=when_mentioned_or_pm_or('!'), case_insensitive=True)
 
 def fill_keyboard():
     k = Keyboard()
+    k.add_button('прокрастинировать')
+    k.add_line()
     k.add_button('неделя')
+    k.add_button('расписание на сегодня')
     k.add_line()
     for day in ['завтра', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу']:
         k.add_button(f'дз на {day}')
@@ -274,6 +277,7 @@ async def on_ready():
     print(f'Logged in as {nbot.group.name}')
     nbot.loop.create_task(check())
     speechrec_setup(nbot)
+    proc_setup(nbot)
 
 
 @nbot.command(name='тест')
@@ -349,13 +353,6 @@ async def do(ctx):
     global dv
     dv = not dv
     return await ctx.reply(':)')
-
-
-@nbot.command(name='Прокрастинировать')
-async def proc(ctx):
-    global counter
-    counter += 1
-    return await ctx.reply(str(counter))
 
 
 nbot.run(vkNotifBotKey)
