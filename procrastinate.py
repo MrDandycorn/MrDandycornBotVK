@@ -31,8 +31,8 @@ class Procrastinate(Cog):
 
     @command(name='прокрастинировать')
     async def proc(self, ctx):
-        way = choice([self.get_random_video(), self.get_random_article(), self.get_random_film()])
-        msg, link = await way
+        way = choice([self.get_random_video, self.get_random_article, self.get_random_film])
+        msg, link = await way()
         return await ctx.reply(msg, attachment=[link])
 
 
