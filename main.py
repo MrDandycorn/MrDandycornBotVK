@@ -259,6 +259,8 @@ nbot = Bot(command_prefix=when_mentioned_or_pm_or('!'), case_insensitive=True)
 
 def fill_keyboard():
     k = Keyboard()
+    k.add_button('неделя')
+    k.add_line()
     for day in ['завтра', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу']:
         k.add_button(f'дз на {day}')
         k.add_button(f'расписание на {day}')
@@ -306,6 +308,18 @@ async def sched(ctx, *, text=None):
         msg = 'Я не понимаю этот формат даты. Чтобы все точно сработало, используйте формат дд.мм.гг'
     else:
         msg = getSchedule(date[1], group)
+    return await ctx.reply(msg)
+
+
+@nbot.command(name='неделя', aliases=['н'])
+async def get_week(ctx):
+    week = datetime.datetime.today().isocalendar()[1]
+    if week >= len(weekType) or weekType[week] == -1:
+        msg = 'Я не знаю :c'
+    elif weekType[week] == 0:
+        msg = 'Сейчас каникулы'
+    else:
+        msg = f'Сейчас {weekType[week]} неделя'
     return await ctx.reply(msg)
 
 
