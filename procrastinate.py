@@ -9,7 +9,7 @@ class Procrastinate(Cog):
         self.bot = bot
 
     async def get_random_film(self):
-        res = await self.bot.general_request('https://www.kinopoisk.ru/chance/?item=true&not_show_rated=false&count=1&min_years=2000&count=5')
+        res = await self.bot.general_request('https://www.kinopoisk.ru/chance/?item=true&not_show_rated=false&count=1&min_years=2000&count=10')
         films = []
         for film in res:
             soup = BeautifulSoup(film, features='lxml')
