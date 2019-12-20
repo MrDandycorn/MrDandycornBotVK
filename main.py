@@ -7,7 +7,7 @@ import dateutil
 import aiohttp
 import locale
 import asyncio
-from vk_botting import Bot, in_user_list, when_mentioned_or_pm_or, Keyboard
+from vk_botting import Bot, in_user_list, when_mentioned_or_pm_or, Keyboard, Attachment, AttachmentType
 from rec import speechrec_setup
 
 from credentials import vkNotifBotKey, mosru_mail1, mosru_psw1, mosru_mail2, mosru_psw2, RUParserInfo, weekType, vkPersUserID
@@ -298,7 +298,8 @@ async def hw(ctx, *, text):
 @nbot.command(name='расписание', aliases=['р'])
 async def sched(ctx, *, text=None):
     if not text:
-        return await ctx.reply(attachment='photo-179049108_457239024')
+        s = Attachment(owner_id=-179049108, id=457239024, type=AttachmentType.PHOTO)
+        return await ctx.reply(attachment=[s])
     text = text.lower()
     group = parseGroup(text)
     if text.endswith(' 1') or text.endswith(' 2'):
