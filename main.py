@@ -302,7 +302,7 @@ async def hw(ctx, *, text):
 @nbot.command(name='расписание', aliases=['р'])
 async def sched(ctx, *, text=None):
     if not text:
-        s = Attachment(owner_id=-179049108, id=457239024, type=AttachmentType.PHOTO)
+        s = Attachment(owner_id=-179049108, id=457239049, type=AttachmentType.PHOTO)
         return await ctx.reply(attachment=[s])
     text = text.lower()
     group = parseGroup(text)
