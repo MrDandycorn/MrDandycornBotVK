@@ -231,7 +231,7 @@ async def check():
     while True:
         try:
             await asyncio.sleep(300)
-            prid = vkPersUserID if dv else 2000000001
+            prid = vkPersUserID if dv else 2000000002
             status = await checkStatus()
             for i in range(len(status)):
                 new = status[i]
