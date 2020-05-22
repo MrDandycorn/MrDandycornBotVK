@@ -7,8 +7,7 @@ import json
 import jwt
 import aioboto3
 
-from credentials import yandex_cloud_folder_id, yandex_service_account_id, yandex_service_key_id,\
-    aws_key_id, aws_secret_key
+from credentials import yandex_cloud_folder_id, yandex_service_account_id, yandex_service_key_id, aws_key_id, aws_secret_key
 
 
 def get_jwt():
@@ -165,12 +164,13 @@ class speechrec(cog.Cog):
 
     @cog.Cog.listener()
     async def on_message_new(self, msg):
-        reply = ''
-        num = 0
         msges = await self.process(msg)
-        for res in msges:
-            num += 1
-            reply += f'{num}. {res}\n'
+        if len(msges) == 1:
+            reply = msges[0]
+        else:
+            reply = ''
+            for num, res in enumerate(msges):
+                reply += f'{num + 1}. {res}\n'
         if reply:
             return await msg.reply(reply)
 

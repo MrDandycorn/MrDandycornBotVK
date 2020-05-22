@@ -19,11 +19,13 @@ class Procrastinate(Cog):
         res = max(films, key=lambda x: x[1])
         return f'Отложи свои дела на пару часов и посмотри этот фильм:\n{res[0]}', res[0]
 
+    @staticmethod
     async def get_random_article(self):
         links = json.load(open('resources/nplus1.json', 'r'))
         res = choice(links)
         return f'Отложи свои дела на несколько минут и почитай вот эту статью:\n{res}', res
 
+    @staticmethod
     async def get_random_video(self):
         links = json.load(open('resources/videos.json', 'r'))
         res = choice(links)
